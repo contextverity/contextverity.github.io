@@ -1748,6 +1748,17 @@ details.table-view > summary {
   margin-bottom: 0.9rem;
 }
 
+.chart-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--bg);
+  margin-bottom: 0.7rem;
+}
+
 .chart {
   display: block;
   width: 100%;

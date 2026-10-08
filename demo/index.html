@@ -67,6 +67,36 @@
       </div>
     </section>
 
+    <section class="section" aria-labelledby="d-videos">
+      <div class="wrap">
+        <h2 id="d-videos">Videos</h2>
+        <p class="muted">Recorded from the local lab: real Backstage 1.55, synthetic data. No narration or audio.</p>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <video controls muted preload="none" playsinline poster="/assets/video/contextverity-overview.jpg" aria-label="Overview demo video">
+              <source src="/assets/video/contextverity-overview.mp4" type="video/mp4">
+              <a href="/assets/video/contextverity-overview.mp4">Download the overview video (MP4)</a>
+            </video>
+            <figcaption><h3>Overview <span class="muted">· 1:14</span></h3><p class="sub"><code>make demo-run</code> resolves context, changes the owner, classification and permission, and verifies each time; then the receipts in Backstage, with an owner change drifting to REFRESH.</p></figcaption>
+          </figure>
+          <figure class="chart-card">
+            <video controls muted preload="none" playsinline poster="/assets/video/contextverity-context-drift.jpg" aria-label="Context drift demo video">
+              <source src="/assets/video/contextverity-context-drift.mp4" type="video/mp4">
+              <a href="/assets/video/contextverity-context-drift.mp4">Download the context drift video (MP4)</a>
+            </video>
+            <figcaption><h3>Context drift <span class="muted">· 1:24</span></h3><p class="sub">Owner change and classification raise through the lab API: the receipt detail shows REFRESH with OWNER_CHANGED before and after, a second receipt shows DENY with CLASSIFICATION_RAISED, and Check drift now re-reads the sources.</p></figcaption>
+          </figure>
+          <figure class="chart-card">
+            <video controls muted preload="none" playsinline poster="/assets/video/contextverity-permission-revocation.jpg" aria-label="Permission revocation demo video">
+              <source src="/assets/video/contextverity-permission-revocation.mp4" type="video/mp4">
+              <a href="/assets/video/contextverity-permission-revocation.mp4">Download the permission revocation video (MP4)</a>
+            </video>
+            <figcaption><h3>Permission revocation <span class="muted">· 1:15</span></h3><p class="sub">catalog.entity.read is revoked for user:default/alex: verification returns DENY with PERMISSION_REVOKED, the receipt shows it, and <code>make demo-mcp</code> shows a guarded MCP action refused on REFRESH and a static-token agent denied.</p></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <section class="section" aria-labelledby="d-replay">
       <div class="wrap">
         <h2 id="d-replay">Replay a scenario</h2>
