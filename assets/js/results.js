@@ -79,7 +79,7 @@
       segs +=
         '<rect class="m-' + k + ' grow" style="--i:' + i + '" x="' + (x + (x ? gap / 2 : 0)).toFixed(1) + '" y="4" width="' +
         Math.max(1, w - (x ? gap : gap / 2)).toFixed(1) + '" height="30" rx="4" tabindex="0" role="img" aria-label="' + esc(tip) + '" data-tip="' + esc(tip) + '"/>';
-      if (w > 34) labels += '<text class="v pop" style="--i:' + i + ';fill:#fff" x="' + (x + w / 2).toFixed(1) + '" y="24" text-anchor="middle">' + n + '</text>';
+      if (w > 34) labels += '<text class="v pop" style="--i:' + i + ';fill:#fff" x="' + (x + w / 2).toFixed(1) + '" y="24" text-anchor="middle">' + esc(n) + '</text>';
       x += w;
     });
     if (!total) return '<p class="muted">No observed outcomes.</p>';
@@ -114,7 +114,7 @@
         (val > 0
           ? '<rect class="m-metric grow" style="--i:' + i + '" x="' + BX + '" y="' + (y + 12) + '" width="' + (val * BW).toFixed(1) + '" height="12" rx="4" tabindex="0" role="img" aria-label="' + esc(tip) + '" data-tip="' + esc(tip) + '"/>'
           : '<rect x="' + BX + '" y="' + (y + 12) + '" width="' + BW + '" height="12" rx="4" fill="transparent" tabindex="0" role="img" aria-label="' + esc(tip) + '" data-tip="' + esc(tip) + '"/>') +
-        '<text class="v pop mono" style="--i:' + i + '" x="' + W + '" y="' + (y + 22) + '" text-anchor="end">' + v.numerator + '/' + v.denominator + '  ' + CV.pct(v.value) + '</text>';
+        '<text class="v pop mono" style="--i:' + i + '" x="' + W + '" y="' + (y + 22) + '" text-anchor="end">' + esc(v.numerator) + '/' + esc(v.denominator) + '  ' + esc(CV.pct(v.value)) + '</text>';
     });
     return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="Detection metrics">' + out + '</svg>';
   }
@@ -151,7 +151,7 @@
         out += '<rect class="m-' + k + ' grow" style="--i:' + i + '" x="' + x.toFixed(1) + '" y="' + (y + 5) + '" width="' + Math.max(1, w - 2).toFixed(1) + '" height="15" rx="3" tabindex="0" role="img" aria-label="' + esc(tip) + '" data-tip="' + esc(tip) + '"/>';
         x += w;
       });
-      out += '<text class="v pop" style="--i:' + i + '" x="' + (x + 6).toFixed(1) + '" y="' + (y + 17) + '">' + by[g].total + '</text>';
+      out += '<text class="v pop" style="--i:' + i + '" x="' + (x + 6).toFixed(1) + '" y="' + (y + 17) + '">' + esc(by[g].total) + '</text>';
     });
     return (
       '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="Scenarios by group and status">' + out + '</svg>' +
