@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docs | ContextVerity</title>
+  <meta name="description" content="Links to the ContextVerity documentation on GitHub: architecture, verdicts, limitations, threat model, testing and results.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0a1020">
+  <meta property="og:title" content="Docs | ContextVerity">
+  <meta property="og:description" content="Links to the ContextVerity documentation on GitHub: architecture, verdicts, limitations, threat model, testing and results.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://contextverity.github.io/docs/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script>(function(){var d=document.documentElement,t=null;d.classList.add('js');try{t=new URLSearchParams(location.search).get('theme')||localStorage.getItem('cv-theme')}catch(e){}d.setAttribute('data-theme',t==='light'?'light':'dark');})();</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="30" height="30"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="30" height="30">ContextVerity</a>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><details class="dd current"><summary>Start here</summary><ul class="dd-menu"><li><a href="/#why">Why ContextVerity<span>The problem it addresses</span></a></li><li><a href="/#how">How it works<span>Resolve, receipt, verify</span></a></li><li><a href="/architecture/">Architecture<span>Packages, flow and boundaries</span></a></li><li><a href="/docs/" aria-current="page">Docs<span>Guides in the repository</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Run it</summary><ul class="dd-menu"><li><a href="/demo/">Demo<span>Run locally or replay scenarios</span></a></li><li><a href="/contributing/">Contributing<span>Set up and send a change</span></a></li><li><a href="/roadmap/">Roadmap<span>Known gaps and direction</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Proof</summary><ul class="dd-menu"><li><a href="/results/">Results<span>Scenarios and benchmarks, from data</span></a></li><li><a href="/security/">Security<span>Model and how to report</span></a></li><li><a href="/#limits">Limitations<span>What is not checked</span></a></li></ul></details></li>
+        </ul>
+        <a class="gh-btn" href="https://github.com/contextverity/contextverity"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a>
+      </nav>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+      <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+  <main id="main">
+    <div class="page-head wrap">
+      <h1>Documentation</h1>
+      <p class="lede">The documentation lives with the code in the ContextVerity repository on GitHub, so it is versioned and reviewed with every change.</p>
+    </div>
+    <section class="section" aria-label="Documents" style="border-top:0;padding-top:0">
+      <div class="wrap">
+        <ul class="limits" data-reveal>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/README.md">Overview</a></b><span>What ContextVerity is, quick start and repository layout.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/architecture.md">Architecture</a></b><span>Packages, data flow, storage and the Backstage integration points.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/context-verdicts.md">Context verdicts</a></b><span>VALID, REFRESH and DENY, every drift code and its effect.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/limitations.md">Limitations</a></b><span>What is not checked, and why.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/threat-model.md">Threat model</a></b><span>Assets, trust boundaries, threats addressed and threats out of scope.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/testing.md">Testing</a></b><span>Scenario tiers, how results are produced and how to regenerate them.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/docs/results.md">Results</a></b><span>Notes on the published scenario and benchmark results.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/ROADMAP.md">Roadmap</a></b><span>Planned work and open questions.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/CONTRIBUTING.md">Contributing</a></b><span>Development setup, checks and pull request guidelines.</span></li>
+          <li><b><a href="https://github.com/contextverity/contextverity/blob/main/SECURITY.md">Security policy</a></b><span>Supported versions and how to report a vulnerability.</span></li>
+        </ul>
+        <p style="margin-top:2rem">On this site: <a href="/architecture/">Architecture overview</a>, <a href="/results/">Results</a>, <a href="/security/">Security model</a>.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="24" height="24"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="24" height="24">ContextVerity</a>
+        <p>ContextVerity is an independent Apache-2.0 open-source project built using open technologies from the Backstage, Kubernetes, CNCF and Linux Foundation ecosystems. It is not a CNCF project and not an official Backstage project.</p>
+        <p>Backstage, OpenTelemetry and Model Context Protocol are projects of their respective foundations and are named here only to describe integrations. This site uses no cookies, analytics or third-party resources.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="/#why">Why ContextVerity</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#backstage">Backstage</a></li>
+          <li><a href="/#receipts">Receipts</a></li>
+          <li><a href="/#drift">Drift</a></li>
+          <li><a href="/#limits">Limitations</a></li>
+          <li><a href="/architecture/">Architecture</a></li>
+          <li><a href="/docs/">Docs</a></li>
+          <li><a href="/demo/">Demo</a></li>
+          <li><a href="/contributing/">Contributing</a></li>
+          <li><a href="/roadmap/">Roadmap</a></li>
+          <li><a href="/results/">Results</a></li>
+          <li><a href="/security/">Security</a></li>
+          <li><a href="https://github.com/contextverity/contextverity">Source on GitHub</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/LICENSE">Apache-2.0 license</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <script src="/assets/js/site.js" defer></script>
+
+</body>
+</html>

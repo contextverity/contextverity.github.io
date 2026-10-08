@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ContextVerity: trust the context before the agent does</title>
+  <meta name="description" content="ContextVerity records the context an agent received and later verifies whether it is still current and allowed before it is reused. Apache-2.0, built on Backstage.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0a1020">
+  <meta property="og:title" content="ContextVerity: trust the context before the agent does">
+  <meta property="og:description" content="ContextVerity records the context an agent received and later verifies whether it is still current and allowed before it is reused. Apache-2.0, built on Backstage.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://contextverity.github.io/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script>(function(){var d=document.documentElement,t=null;d.classList.add('js');try{t=new URLSearchParams(location.search).get('theme')||localStorage.getItem('cv-theme')}catch(e){}d.setAttribute('data-theme',t==='light'?'light':'dark');})();</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="30" height="30"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="30" height="30">ContextVerity</a>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><details class="dd"><summary>Start here</summary><ul class="dd-menu"><li><a href="/#why">Why ContextVerity<span>The problem it addresses</span></a></li><li><a href="/#how">How it works<span>Resolve, receipt, verify</span></a></li><li><a href="/architecture/">Architecture<span>Packages, flow and boundaries</span></a></li><li><a href="/docs/">Docs<span>Guides in the repository</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Run it</summary><ul class="dd-menu"><li><a href="/demo/">Demo<span>Run locally or replay scenarios</span></a></li><li><a href="/contributing/">Contributing<span>Set up and send a change</span></a></li><li><a href="/roadmap/">Roadmap<span>Known gaps and direction</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Proof</summary><ul class="dd-menu"><li><a href="/results/">Results<span>Scenarios and benchmarks, from data</span></a></li><li><a href="/security/">Security<span>Model and how to report</span></a></li><li><a href="/#limits">Limitations<span>What is not checked</span></a></li></ul></details></li>
+        </ul>
+        <a class="gh-btn" href="https://github.com/contextverity/contextverity"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a>
+      </nav>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+      <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="brandline"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="30" height="30"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="30" height="30">ContextVerity</p>
+        <h1 id="hero-title">Trust the context <span class="grad">before the agent does.</span></h1>
+        <p class="subhead"><strong>Fresh, scoped and verifiable context for AI agents.</strong> ContextVerity records the context an agent received from Backstage, then verifies that it is still current and allowed before it is reused.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/demo/">Run the Demo</a>
+          <a class="btn btn-secondary" href="https://github.com/contextverity/contextverity">View on GitHub</a>
+        </div>
+        <p class="status-note">Independent Apache-2.0 open-source project in early development. Built on Backstage; evaluated on synthetic data only.</p>
+      </div>
+    </section>
+
+    <section class="flow-wrap" aria-labelledby="flow-h">
+      <div class="wrap">
+        <h2 id="flow-h" class="visually-hidden">From Backstage sources to a verdict</h2>
+        <div class="flow" id="flow" data-reveal>
+          <svg class="flow-links" aria-hidden="true" focusable="false"></svg>
+          <div class="flow-col">
+            <p class="col-label">Backstage sources</p>
+            <ul class="src-cards">
+              <li class="src-card" data-src="owner"><b>Owner</b><span class="st" data-base="team-payments">team-payments</span><span class="dot" aria-hidden="true"></span></li>
+              <li class="src-card" data-src="api"><b>API</b><span class="st" data-base="payments-api sha256:e1e3…">payments-api sha256:e1e3…</span><span class="dot" aria-hidden="true"></span></li>
+              <li class="src-card" data-src="deps"><b>Dependencies</b><span class="st" data-base="notifications, payments-db">notifications, payments-db</span><span class="dot" aria-hidden="true"></span></li>
+              <li class="src-card" data-src="perm"><b>Permission</b><span class="st" data-base="catalog.entity.read ALLOW">catalog.entity.read ALLOW</span><span class="dot" aria-hidden="true"></span></li>
+              <li class="src-card" data-src="class"><b>Classification</b><span class="st" data-base="INTERNAL, ceiling INTERNAL">INTERNAL, ceiling INTERNAL</span><span class="dot" aria-hidden="true"></span></li>
+            </ul>
+          </div>
+          <div class="flow-col center">
+            <p class="col-label">ContextVerity</p>
+            <div class="core">
+              <div class="core-mark"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="80" height="80"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="80" height="80"></div>
+              <span class="core-name">ContextVerity</span>
+              <span class="core-rule">Verify before reuse</span>
+              <span class="core-status" aria-hidden="true">receipt issued</span>
+            </div>
+          </div>
+          <div class="flow-col">
+            <p class="col-label">Verdict at verify</p>
+            <ul class="verdict-rows">
+              <li class="vrow v-VALID"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><circle r="8" fill="currentColor"/><path d="M-3.6 .2l2.5 2.6 4.8-5.2" fill="none" style="stroke:var(--knock)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>VALID</b><span class="code">no relevant change</span><span class="why">context still matches</span></li>
+              <li class="vrow v-REFRESH"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><path d="M5.8 3.2A6.6 6.6 0 1 1 5.4-3.9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><path d="M7.6-8.2L7.9-2.2 2-3.4Z" fill="currentColor"/></svg><b>REFRESH</b><span class="code">e.g. OWNER_CHANGED</span><span class="why">no longer current: re-resolve</span></li>
+              <li class="vrow v-DENY"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><rect x="-7.5" y="-7.5" width="15" height="15" rx="2.5" fill="currentColor"/><rect x="-4.3" y="-1.25" width="8.6" height="2.5" rx="1" style="fill:var(--knock)"/></svg><b>DENY</b><span class="code">e.g. CLASSIFICATION_RAISED</span><span class="why">no longer permitted: stop</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="flow-bar">
+          <p class="flow-event" aria-hidden="true">Resolve component:default/payments for incident-triage</p>
+          <button class="btn btn-secondary btn-small flow-toggle" type="button" aria-pressed="false" hidden>Pause animation</button>
+        </div>
+        <p class="visually-hidden">Illustration: when a source changes after a receipt was issued, verification returns REFRESH (for example the owner changed), DENY (for example classification rose above the grant) or VALID when nothing relevant changed.</p>
+        <dl class="counters">
+          <div class="counter" data-reveal><dt>live-lab scenarios executed</dt><dd><span data-count="scenarios-backstage.json:summary.executed">–</span><small>of <span data-count="scenarios-backstage.json:summary.total">–</span></small></dd></div>
+          <div class="counter" data-reveal style="--i:1"><dt>false invalidations (unchanged context flagged)</dt><dd><span data-count="scenarios-backstage.json:summary.metrics.falseInvalidationRate.numerator">–</span><small>of <span data-count="scenarios-backstage.json:summary.metrics.falseInvalidationRate.denominator">–</span></small></dd></div>
+          <div class="counter" data-reveal style="--i:2"><dt>false acceptances (changed context passed)</dt><dd><span data-count="scenarios-backstage.json:summary.metrics.falseAcceptanceRate.numerator">–</span><small>of <span data-count="scenarios-backstage.json:summary.metrics.falseAcceptanceRate.denominator">–</span></small></dd></div>
+        </dl>
+        <p class="counters-note">Read live from <code>data/scenarios-backstage.json</code>: live Backstage lab tier, synthetic scenarios, single machine. A small designed scenario set, not production evidence. <a href="/results/">See all results</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="why-h">Why ContextVerity</h2>
+          <p>Agents act on context they were handed earlier. The platform keeps moving after the handover.</p>
+        </div>
+        <div class="two-col">
+          <div class="prose">
+            <p>An agent triaging an incident asks the developer platform who owns <code>payments</code>, which API it provides and what it depends on. That answer is cached, passed between tool calls and reused minutes or hours later. Meanwhile ownership moves to another team, an API definition changes, a permission is revoked, or the service is reclassified as restricted.</p>
+            <p>ContextVerity records the context an agent received, the source state and permissions that shaped it, and later verifies whether that context is still current and allowed before it is reused.</p>
+            <p>It detects configured source and authorization drift before receipt reuse. The answer is deterministic and explainable: a verdict plus typed drift codes with before and after values. No language model takes part in any decision.</p>
+          </div>
+          <div class="is-isnot" data-reveal>
+            <div>
+              <h3>What it is</h3>
+              <ul>
+                <li>A context resolver and receipt service for Backstage</li>
+                <li>Typed drift detection over catalog, permission and policy state</li>
+                <li>Three verdicts: VALID, REFRESH, DENY</li>
+                <li>An explicit check an agent calls before acting</li>
+              </ul>
+            </div>
+            <div>
+              <h3>What it is not</h3>
+              <ul>
+                <li>Not an AI firewall, gateway or MCP server</li>
+                <li>Not a hallucination or prompt-injection detector</li>
+                <li>Not a guarantee about state after verification</li>
+                <li>Not production proven; no production adopters yet</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how" aria-labelledby="how-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="how-h">How it works</h2>
+          <p>Resolve once, keep a receipt, verify before every reuse.</p>
+        </div>
+        <ol class="steps" data-reveal>
+          <li>
+            <h3>Resolve</h3>
+            <p>The agent or engineer asks for context about a subject, for a purpose. ContextVerity selects the context policy that grants it and checks <code>catalog.entity.read</code> for the caller.</p>
+            <pre><code>POST /api/contextverity/v1/resolve
+{
+  "subject": "component:default/payments",
+  "purpose": "incident-triage",
+  "categories": ["ownership", "apis",
+                 "dependencies"]
+}</code></pre>
+          </li>
+          <li>
+            <h3>Receive context and a receipt</h3>
+            <p>Normalized catalog records are digested with SHA-256 over canonical JSON. An immutable receipt is stored server-side with an HMAC-SHA256 integrity tag, and returned with the context.</p>
+            <pre><code>{
+  "receipt": {
+    "receiptId": "…",
+    "subject": "component:default/payments",
+    "validUntil": "…",
+    "snapshotDigest": "sha256:…"
+  },
+  "context": [ … ]
+}</code></pre>
+          </li>
+          <li>
+            <h3>Verify before reuse</h3>
+            <p>Before acting on that context again, the agent verifies the receipt. ContextVerity re-checks binding, intent, policy, TTL and permissions, re-fetches sources, and compares.</p>
+            <pre><code>POST /api/contextverity/v1/receipts/:id/verify
+
+{ "verdict": "REFRESH",
+  "drift": [{ "code": "OWNER_CHANGED",
+              "effect": "REFRESH",
+              "before": "group:default/team-payments",
+              "after": "group:default/team-commerce" }] }</code></pre>
+          </li>
+        </ol>
+        <figure data-reveal class="diagram">
+          <img class="img-dark" src="/assets/img/context-flow-dark.svg" alt="Flow: fetch from the Backstage catalog, build a ContextSnapshot, issue a ContextReceipt. Later, after something changes, verify and receive VALID, REFRESH or DENY." width="960" height="470" loading="lazy"><img class="img-light" src="/assets/img/context-flow.svg" alt="Flow: fetch from the Backstage catalog, build a ContextSnapshot, issue a ContextReceipt. Later, after something changes, verify and receive VALID, REFRESH or DENY." width="960" height="470" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="backstage" aria-labelledby="bs-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="bs-h">Backstage</h2>
+          <p>ContextVerity is a set of Backstage 1.55 plugins. It reads from the platform you already run and uses its permission model.</p>
+        </div>
+        <dl class="points" data-reveal>
+          <div><dt>Software Catalog</dt><dd>The context source: owner, lifecycle, dependencies, provided APIs, API definition digest, the TechDocs reference annotation and the <code>contextverity.github.io/classification</code> annotation.</dd></div>
+          <div><dt>Permission Framework</dt><dd><code>catalog.entity.read</code> is checked for the caller at resolve and re-evaluated at verify. Receipts are protected by <code>contextverity.receipt.read</code>.</dd></div>
+          <div><dt>Actions Registry</dt><dd>Registers <code>contextverity:resolve-context</code> and <code>contextverity:verify-receipt</code>.</dd></div>
+          <div><dt>MCP Actions backend</dt><dd>The official Backstage MCP Actions backend exposes those actions as MCP tools, so agents can call them without a custom MCP server.</dd></div>
+          <div><dt>Database service</dt><dd>Receipts live in the Backstage database (SQLite for development, PostgreSQL otherwise), with a retention task.</dd></div>
+          <div><dt>Frontend plugin</dt><dd>A receipts list and receipt detail page with provenance and drift, built for the new frontend system.</dd></div>
+        </dl>
+        <p style="margin-top:1.5rem"><a href="/architecture/">See the architecture and integration boundaries</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="receipts" aria-labelledby="rc-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="rc-h">Receipts</h2>
+          <p>A receipt is the server's record of exactly what was issued, to whom and why. It holds references and digests, never secrets or document bodies.</p>
+        </div>
+        <div class="receipt-specimen" data-reveal>
+          <div class="receipt-shell">
+            <div class="receipt">
+              <div class="receipt-head"><strong>ContextReceipt</strong><span class="muted">schemaVersion 1</span></div>
+              <dl>
+                <dt>receiptId</dt><dd>stable identifier</dd>
+                <dt>issuer</dt><dd>this ContextVerity instance</dd>
+                <dt>consumer</dt><dd>user:default/alex</dd>
+                <dt>subject</dt><dd>component:default/payments</dd>
+                <dt>purpose</dt><dd>incident-triage</dd>
+                <dt>grant</dt><dd>policyId, policyDigest, categories, sensitivityCeiling INTERNAL, ttlSeconds</dd>
+                <dt>sources</dt><dd>catalog:component:default/payments<br>apidef:api:default/payments-api</dd>
+                <dt>permissions</dt><dd>catalog.entity.read ALLOW (permission-policy)</dd>
+                <dt>classification</dt><dd>INTERNAL</dd>
+                <dt>issuedAt</dt><dd>timestamp</dd>
+                <dt>validUntil</dt><dd>issuedAt + TTL</dd>
+              </dl>
+              <div class="receipt-foot">snapshotDigest sha256 over sources, grant and bindings<br>stored with an HMAC-SHA256 integrity tag</div>
+            </div>
+          </div>
+          <ul class="annot">
+            <li><b>Bound to a consumer, issuer, subject and purpose</b><span>Presenting it as someone else, to another instance, for another subject or purpose, or for a wider scope yields DENY.</span></li>
+            <li><b>Grant recorded with a digest</b><span>If the policy is removed or narrowed below the receipt, verification yields DENY. A semantically equivalent rewrite does not invalidate it.</span></li>
+            <li><b>Per-source digests</b><span>Each normalized source record is digested over canonical JSON, so verification can name exactly which field changed.</span></li>
+            <li><b>Permission basis</b><span>Each decision records how it was reached, including when Backstage did not consult a permission policy because the caller was a service.</span></li>
+            <li><b>Server-authoritative</b><span>Verification uses the stored receipt, not a copy the client sends back. Tampering with the stored record fails the integrity check.</span></li>
+          </ul>
+        </div>
+        <figure data-reveal class="diagram">
+          <img class="img-dark" src="/assets/img/receipt-lifecycle-dark.svg" alt="Receipt lifecycle: resolve, authorize, fetch and digest, issue. Verify before reuse: VALID reuses, REFRESH re-resolves for a new receipt, DENY stops. A refused resolve issues no receipt." width="960" height="500" loading="lazy"><img class="img-light" src="/assets/img/receipt-lifecycle.svg" alt="Receipt lifecycle: resolve, authorize, fetch and digest, issue. Verify before reuse: VALID reuses, REFRESH re-resolves for a new receipt, DENY stops. A refused resolve issues no receipt." width="960" height="500" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="drift" aria-labelledby="dr-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="dr-h">Drift</h2>
+          <p>Verification produces typed drift codes. Each carries an effect of NONE, REFRESH or DENY, and the verdict is the strongest effect.</p>
+        </div>
+        <div class="two-col">
+          <dl class="points" style="grid-template-columns:1fr">
+            <div><dt><span class="verdict v-VALID"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><circle r="8" fill="currentColor"/><path d="M-3.6 .2l2.5 2.6 4.8-5.2" fill="none" style="stroke:var(--knock)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>VALID</span></dt><dd>The context still matches source, permission and policy state at verification time. It is not a promise about later.</dd></div>
+            <div><dt><span class="verdict v-REFRESH"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><path d="M5.8 3.2A6.6 6.6 0 1 1 5.4-3.9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><path d="M7.6-8.2L7.9-2.2 2-3.4Z" fill="currentColor"/></svg>REFRESH</span></dt><dd>No longer current, but not prohibited. Re-resolve before acting.</dd></div>
+            <div><dt><span class="verdict v-DENY"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><rect x="-7.5" y="-7.5" width="15" height="15" rx="2.5" fill="currentColor"/><rect x="-4.3" y="-1.25" width="8.6" height="2.5" rx="1" style="fill:var(--knock)"/></svg>DENY</span></dt><dd>Current authorization, classification, policy or binding no longer permits this context.</dd></div>
+          </dl>
+          <figure data-reveal class="diagram" style="margin:0">
+            <img class="img-dark" src="/assets/img/drift-verdict-dark.svg" alt="Example drift items with their effects: OWNER_CHANGED, API_CHANGED, DOCUMENTATION_CHANGED and TTL_EXPIRED are REFRESH; CLASSIFICATION_RAISED above the ceiling and PERMISSION_REVOKED are DENY; an unrelated change produces no drift. The verdict is the strongest effect." width="960" height="540" loading="lazy"><img class="img-light" src="/assets/img/drift-verdict.svg" alt="Example drift items with their effects: OWNER_CHANGED, API_CHANGED, DOCUMENTATION_CHANGED and TTL_EXPIRED are REFRESH; CLASSIFICATION_RAISED above the ceiling and PERMISSION_REVOKED are DENY; an unrelated change produces no drift. The verdict is the strongest effect." width="960" height="540" loading="lazy">
+          </figure>
+        </div>
+        <div class="code-groups" data-reveal>
+          <div><h3>Source</h3><ul>
+            <li><code>OWNER_CHANGED</code></li><li><code>LIFECYCLE_CHANGED</code></li><li><code>API_CHANGED</code></li><li><code>API_DEPRECATED</code></li><li><code>DEPENDENCY_CHANGED</code></li><li><code>RELATION_CHANGED</code></li><li><code>DOCUMENTATION_CHANGED</code></li><li><code>SOURCE_CHANGED</code></li><li><code>ENTITY_RECREATED</code></li><li><code>SOURCE_DELETED</code></li>
+          </ul></div>
+          <div><h3>Availability and classification</h3><ul>
+            <li><code>SOURCE_UNAVAILABLE</code></li><li><code>SOURCE_MALFORMED</code></li><li><code>CLASSIFICATION_RAISED</code></li><li><code>CLASSIFICATION_LOWERED</code></li>
+          </ul>
+          <h3 style="margin-top:1.25rem">Time</h3><ul><li><code>TTL_EXPIRED</code></li></ul></div>
+          <div><h3>Authorization and policy</h3><ul>
+            <li><code>PERMISSION_REVOKED</code></li><li><code>POLICY_CHANGED</code></li><li><code>POLICY_NARROWED</code></li><li><code>POLICY_REMOVED</code></li>
+          </ul></div>
+          <div><h3>Binding and integrity</h3><ul>
+            <li><code>CONSUMER_MISMATCH</code></li><li><code>SUBJECT_MISMATCH</code></li><li><code>PURPOSE_MISMATCH</code></li><li><code>SCOPE_EXCEEDED</code></li><li><code>ISSUER_MISMATCH</code></li><li><code>RECEIPT_INTEGRITY_FAILED</code></li>
+          </ul></div>
+        </div>
+        <p class="muted" style="margin-top:1.5rem">The effect of a code depends on the situation and the policy: a classification raised within the grant ceiling is REFRESH, above it DENY; a policy can escalate a code to DENY. See <a href="https://github.com/contextverity/contextverity/blob/main/docs/context-verdicts.md">context verdicts</a> for the full mapping.</p>
+      </div>
+    </section>
+
+    <section class="section" id="limits" aria-labelledby="lim-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="lim-h">Known limitations</h2>
+          <p>Stated up front, because a verification tool is only useful if you know exactly what it checks.</p>
+        </div>
+        <ul class="limits" data-reveal>
+          <li><b>Verification is point-in-time</b><span>VALID means the state matched when verified. Changes between verification and action (TOCTOU) are possible; verify close to the action.</span></li>
+          <li><b>Integration is explicit and advisory</b><span>Backstage has no supported hook to intercept other plugins' actions. Agents must call verify before acting.</span></li>
+          <li><b>Service principals</b><span>Backstage does not consult permission policies for service principals. The receipt records that basis instead of implying a policy check.</span></li>
+          <li><b>Agent identity over MCP</b><span>Through the MCP Actions backend, a static-token agent is forwarded as <code>plugin:mcp-actions</code>. Per-agent identity is preserved only for user tokens.</span></li>
+          <li><b>TechDocs content</b><span>Only the TechDocs reference annotation is tracked. Documentation content provenance is not implemented.</span></li>
+          <li><b>Source truth is trusted</b><span>If the catalog itself is wrong or compromised, ContextVerity faithfully records the wrong state.</span></li>
+          <li><b>Synthetic evaluation only</b><span>Results come from synthetic scenarios on a single machine. There are no production adopters.</span></li>
+        </ul>
+        <p style="margin-top:1.5rem"><a href="https://github.com/contextverity/contextverity/blob/main/docs/limitations.md">Read the full limitations document</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="integrations" aria-labelledby="int-h">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2 id="int-h">Open-source integrations</h2>
+          <p>Every integration listed here is implemented in the repository today.</p>
+        </div>
+        <ul class="badges" data-reveal>
+          <li><a href="https://backstage.io/">Backstage</a><span class="org">CNCF Incubating</span><p>Context source and developer-platform integration</p></li>
+          <li><a href="https://opentelemetry.io/">OpenTelemetry</a><span class="org">CNCF Graduated</span><p>Traces and metrics for resolution and verification</p></li>
+          <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a><span class="org">Linux Foundation, Agentic AI Foundation</span><p>Agent tool path via Backstage's official MCP Actions backend</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cta-band" aria-labelledby="cta-h">
+      <div class="wrap">
+        <h2 id="cta-h">See it on a local Backstage, without cloud credentials or an LLM key.</h2>
+        <div class="actions">
+          <a class="btn btn-primary" href="/demo/">Run the Demo</a>
+          <a class="btn btn-secondary" href="/results/">Read the results</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="24" height="24"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="24" height="24">ContextVerity</a>
+        <p>ContextVerity is an independent Apache-2.0 open-source project built using open technologies from the Backstage, Kubernetes, CNCF and Linux Foundation ecosystems. It is not a CNCF project and not an official Backstage project.</p>
+        <p>Backstage, OpenTelemetry and Model Context Protocol are projects of their respective foundations and are named here only to describe integrations. This site uses no cookies, analytics or third-party resources.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="/#why">Why ContextVerity</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#backstage">Backstage</a></li>
+          <li><a href="/#receipts">Receipts</a></li>
+          <li><a href="/#drift">Drift</a></li>
+          <li><a href="/#limits">Limitations</a></li>
+          <li><a href="/architecture/">Architecture</a></li>
+          <li><a href="/docs/">Docs</a></li>
+          <li><a href="/demo/">Demo</a></li>
+          <li><a href="/contributing/">Contributing</a></li>
+          <li><a href="/roadmap/">Roadmap</a></li>
+          <li><a href="/results/">Results</a></li>
+          <li><a href="/security/">Security</a></li>
+          <li><a href="https://github.com/contextverity/contextverity">Source on GitHub</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/LICENSE">Apache-2.0 license</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/flow.js" defer></script>
+</body>
+</html>

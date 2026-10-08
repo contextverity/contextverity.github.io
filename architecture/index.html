@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture | ContextVerity</title>
+  <meta name="description" content="How ContextVerity resolves, records and verifies agent context inside Backstage: packages, flow, verdict semantics, the MCP integration boundary and identity notes.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0a1020">
+  <meta property="og:title" content="Architecture | ContextVerity">
+  <meta property="og:description" content="How ContextVerity resolves, records and verifies agent context inside Backstage: packages, flow, verdict semantics, the MCP integration boundary and identity notes.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://contextverity.github.io/architecture/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script>(function(){var d=document.documentElement,t=null;d.classList.add('js');try{t=new URLSearchParams(location.search).get('theme')||localStorage.getItem('cv-theme')}catch(e){}d.setAttribute('data-theme',t==='light'?'light':'dark');})();</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="30" height="30"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="30" height="30">ContextVerity</a>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><details class="dd current"><summary>Start here</summary><ul class="dd-menu"><li><a href="/#why">Why ContextVerity<span>The problem it addresses</span></a></li><li><a href="/#how">How it works<span>Resolve, receipt, verify</span></a></li><li><a href="/architecture/" aria-current="page">Architecture<span>Packages, flow and boundaries</span></a></li><li><a href="/docs/">Docs<span>Guides in the repository</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Run it</summary><ul class="dd-menu"><li><a href="/demo/">Demo<span>Run locally or replay scenarios</span></a></li><li><a href="/contributing/">Contributing<span>Set up and send a change</span></a></li><li><a href="/roadmap/">Roadmap<span>Known gaps and direction</span></a></li></ul></details></li>
+          <li><details class="dd"><summary>Proof</summary><ul class="dd-menu"><li><a href="/results/">Results<span>Scenarios and benchmarks, from data</span></a></li><li><a href="/security/">Security<span>Model and how to report</span></a></li><li><a href="/#limits">Limitations<span>What is not checked</span></a></li></ul></details></li>
+        </ul>
+        <a class="gh-btn" href="https://github.com/contextverity/contextverity"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a>
+      </nav>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+      <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+  <main id="main">
+    <div class="page-head wrap">
+      <h1>Architecture</h1>
+      <p class="lede">Five packages inside a Backstage 1.55 backend and app. A deterministic engine decides; Backstage supplies the sources, the permissions and the agent tool path.</p>
+    </div>
+    <section class="section" aria-labelledby="a-pk">
+      <div class="wrap">
+        <figure data-reveal class="diagram" style="margin-top:0">
+          <img class="img-dark" src="/assets/img/architecture-dark.svg" alt="Architecture: agents call ContextVerity over HTTP or through the official Backstage MCP Actions backend and Actions Registry. The backend plugin uses the core engine and the Backstage adapters for the Software Catalog and Permission Framework, stores receipts via the database service, and emits OpenTelemetry spans and metrics. A frontend plugin lists receipts." width="1040" height="680"><img class="img-light" src="/assets/img/architecture.svg" alt="Architecture: agents call ContextVerity over HTTP or through the official Backstage MCP Actions backend and Actions Registry. The backend plugin uses the core engine and the Backstage adapters for the Software Catalog and Permission Framework, stores receipts via the database service, and emits OpenTelemetry spans and metrics. A frontend plugin lists receipts." width="1040" height="680">
+        </figure>
+        <h2 id="a-pk">Packages</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Package</th><th scope="col">Role</th></tr></thead>
+            <tbody>
+              <tr><td><code>@contextverity/core</code></td><td>Deterministic, provider-neutral engine: canonicalization, digests, the policy model, the verdict engine, the receipt service and OpenTelemetry API instrumentation.</td></tr>
+              <tr><td><code>@contextverity/plugin-contextverity-common</code></td><td>Shared types and the <code>contextverity.receipt.read</code> permission.</td></tr>
+              <tr><td><code>@contextverity/plugin-contextverity-node</code></td><td>Backstage Software Catalog source provider and Backstage Permission Framework authorizer.</td></tr>
+              <tr><td><code>@contextverity/plugin-contextverity-backend</code></td><td>Backstage backend plugin: HTTP API under <code>/api/contextverity/v1</code>, a Knex receipt store on the Backstage database service, a retention task, and the two actions registered in the Actions Registry.</td></tr>
+              <tr><td><code>@contextverity/plugin-contextverity</code></td><td>Backstage frontend plugin for the new frontend system: receipts list and receipt detail with provenance and drift.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="a-flow">
+      <div class="wrap">
+        <h2 id="a-flow">Resolution and verification</h2>
+        <div class="two-col">
+          <div class="prose">
+            <h3>Resolve</h3>
+            <ol>
+              <li>A caller sends <code>POST /api/contextverity/v1/resolve</code> with a subject, a purpose and categories.</li>
+              <li>ContextVerity selects the context policy that grants this consumer, purpose and subject (the grant). No matching policy, an ungranted category, a disallowed source kind or a classification above the ceiling refuses the request.</li>
+              <li>The Permission Framework is asked whether the caller may perform <code>catalog.entity.read</code> on each entity.</li>
+              <li>The catalog provider fetches normalized records: owner, lifecycle, dependencies, provided APIs, API definition digest, TechDocs reference and classification.</li>
+              <li>Each record is digested with SHA-256 over canonical JSON (RFC 8785 style). The receipt is stored, immutable and integrity-tagged with HMAC-SHA256, and returned with the context.</li>
+            </ol>
+          </div>
+          <div class="prose">
+            <h3>Verify</h3>
+            <ol>
+              <li>A caller sends <code>POST /api/contextverity/v1/receipts/:id/verify</code>.</li>
+              <li>Binding: consumer, issuer and integrity of the stored receipt.</li>
+              <li>Intent: subject, purpose and requested scope against the receipt.</li>
+              <li>Policy: removed, narrowed or changed since issue.</li>
+              <li>Time: the receipt's TTL.</li>
+              <li>Permissions are re-evaluated for the consumer, and sources are re-fetched and compared field by field.</li>
+              <li>Every difference becomes a typed drift item with an effect. The verdict is the strongest effect.</li>
+            </ol>
+          </div>
+        </div>
+        <figure data-reveal class="diagram">
+          <img class="img-dark" src="/assets/img/context-flow-dark.svg" alt="Fetch, ContextSnapshot, ContextReceipt; something changes; verify; VALID, REFRESH or DENY." width="960" height="470" loading="lazy"><img class="img-light" src="/assets/img/context-flow.svg" alt="Fetch, ContextSnapshot, ContextReceipt; something changes; verify; VALID, REFRESH or DENY." width="960" height="470" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="a-v">
+      <div class="wrap">
+        <h2 id="a-v">Verdict semantics</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Verdict</th><th scope="col">Meaning</th><th scope="col">What the caller should do</th><th scope="col">Examples</th></tr></thead>
+            <tbody>
+              <tr><td><span class="verdict v-VALID"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><circle r="8" fill="currentColor"/><path d="M-3.6 .2l2.5 2.6 4.8-5.2" fill="none" style="stroke:var(--knock)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>VALID</span></td><td>Matched source, permission and policy state at verification time.</td><td>Act on the recorded context. Verify again before later actions.</td><td>No change; unrelated entity changed; relation order changed</td></tr>
+              <tr><td><span class="verdict v-REFRESH"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><path d="M5.8 3.2A6.6 6.6 0 1 1 5.4-3.9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><path d="M7.6-8.2L7.9-2.2 2-3.4Z" fill="currentColor"/></svg>REFRESH</span></td><td>No longer current, but not prohibited.</td><td>Re-resolve to get a new receipt before acting.</td><td><code>OWNER_CHANGED</code>, <code>API_CHANGED</code>, <code>TTL_EXPIRED</code>, <code>ENTITY_RECREATED</code></td></tr>
+              <tr><td><span class="verdict v-DENY"><svg class="glyph" viewBox="-10 -10 20 20" aria-hidden="true" focusable="false"><rect x="-7.5" y="-7.5" width="15" height="15" rx="2.5" fill="currentColor"/><rect x="-4.3" y="-1.25" width="8.6" height="2.5" rx="1" style="fill:var(--knock)"/></svg>DENY</span></td><td>Current authorization, classification, policy or binding no longer permits it.</td><td>Do not use this context.</td><td><code>PERMISSION_REVOKED</code>, <code>CLASSIFICATION_RAISED</code> above the ceiling, <code>POLICY_REMOVED</code>, <code>CONSUMER_MISMATCH</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">No language model is involved in any decision. Effects come from the drift code, the situation and the policy.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="a-mcp">
+      <div class="wrap">
+        <div class="two-col">
+          <div class="prose">
+            <h2 id="a-mcp">The MCP integration boundary</h2>
+            <p>ContextVerity registers two actions in the Backstage Actions Registry: <code>contextverity:resolve-context</code> and <code>contextverity:verify-receipt</code>. The official <code>@backstage/plugin-mcp-actions-backend</code> exposes them as the MCP tools <code>contextverity.resolve-context</code> and <code>contextverity.verify-receipt</code>.</p>
+            <p>The integration is explicit and advisory. ContextVerity is not an MCP server of its own, not a gateway, and it does not intercept other actions: Backstage provides no supported hook for that. An agent, or the harness around it, calls verify before acting and honours the verdict.</p>
+          </div>
+          <div class="prose">
+            <h2>Identity notes</h2>
+            <ul>
+              <li>Receipts bind to the consumer that resolved them; another consumer presenting the receipt yields <code>CONSUMER_MISMATCH</code>.</li>
+              <li>Through the MCP Actions backend, a static-token agent is forwarded as <code>plugin:mcp-actions</code>. Per-agent identity is preserved only when the agent uses a user token.</li>
+              <li>Backstage does not consult permission policies for service principals. ContextVerity records the decision basis (<code>permission-policy</code> or <code>service-principal</code>) so the receipt does not overstate what was checked.</li>
+            </ul>
+            <h2>Time of check, time of use</h2>
+            <p>A verdict describes state at verification time. A change can land between a VALID verdict and the action it gates. Keep TTLs short and verify as close to the action as you can.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="a-otel">
+      <div class="wrap">
+        <h2 id="a-otel">Observability</h2>
+        <div class="two-col">
+          <div>
+            <h3>Spans</h3>
+            <ul class="annot">
+              <li><code>contextverity.resolve</code></li><li><code>contextverity.receipt.issue</code></li><li><code>contextverity.receipt.verify</code></li><li><code>contextverity.source.fetch</code></li><li><code>contextverity.permission.check</code></li><li><code>contextverity.drift.compare</code></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Metrics</h3>
+            <ul class="annot">
+              <li><code>contextverity.receipts.issued</code></li><li><code>contextverity.verifications</code></li><li><code>contextverity.drift</code></li><li><code>contextverity.verification.duration</code></li><li><code>contextverity.source.fetch.duration</code></li><li><code>contextverity.receipts.active</code></li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted">Instrumentation uses the OpenTelemetry API; the exporter is chosen by the deployment.</p>
+        <h2 style="margin-top:2.5rem">Read more</h2>
+        <ul>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/architecture.md">Architecture</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/context-verdicts.md">Context verdicts and drift codes</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/threat-model.md">Threat model</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/limitations.md">Limitations</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <a class="brand" href="/"><img class="img-dark" src="/assets/img/logo-mark-dark.svg" alt="" width="24" height="24"><img class="img-light" src="/assets/img/logo-mark.svg" alt="" width="24" height="24">ContextVerity</a>
+        <p>ContextVerity is an independent Apache-2.0 open-source project built using open technologies from the Backstage, Kubernetes, CNCF and Linux Foundation ecosystems. It is not a CNCF project and not an official Backstage project.</p>
+        <p>Backstage, OpenTelemetry and Model Context Protocol are projects of their respective foundations and are named here only to describe integrations. This site uses no cookies, analytics or third-party resources.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="/#why">Why ContextVerity</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#backstage">Backstage</a></li>
+          <li><a href="/#receipts">Receipts</a></li>
+          <li><a href="/#drift">Drift</a></li>
+          <li><a href="/#limits">Limitations</a></li>
+          <li><a href="/architecture/">Architecture</a></li>
+          <li><a href="/docs/">Docs</a></li>
+          <li><a href="/demo/">Demo</a></li>
+          <li><a href="/contributing/">Contributing</a></li>
+          <li><a href="/roadmap/">Roadmap</a></li>
+          <li><a href="/results/">Results</a></li>
+          <li><a href="/security/">Security</a></li>
+          <li><a href="https://github.com/contextverity/contextverity">Source on GitHub</a></li>
+          <li><a href="https://github.com/contextverity/contextverity/blob/main/LICENSE">Apache-2.0 license</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <script src="/assets/js/site.js" defer></script>
+
+</body>
+</html>

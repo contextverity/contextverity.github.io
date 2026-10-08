@@ -1,0 +1,13 @@
+{
+  "sourceRepo": "https://github.com/contextverity/contextverity",
+  "commit": "3066e49849cac84e074419f106474ed920c7c4f3",
+  "syncedAt": "2026-10-08T11:01:24.365Z",
+  "files": [
+    "benchmarks-backstage.json",
+    "benchmarks-core.json",
+    "scenarios-backstage.json",
+    "scenarios-core.json",
+    "summary.json",
+    "telemetry-backstage.json"
+  ]
+}
