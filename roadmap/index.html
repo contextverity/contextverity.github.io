@@ -45,6 +45,8 @@
             <h2 id="r-now">Available now</h2>
             <ul class="annot">
               <li><b>Backstage plugins</b><span>Core engine, common types, catalog and permission adapters, backend plugin and frontend plugin on Backstage 1.55.</span></li>
+              <li><b>npm packages</b><span>All five packages published under <code>@contextverity</code> with provenance.</span></li>
+              <li><b>Kubernetes lab</b><span>A Podman-built image and Helm chart (non-root, read-only root filesystem, NetworkPolicy), validated on kind with a scenario tier.</span></li>
               <li><b>Receipts and verification</b><span>Immutable, integrity-tagged receipts; typed drift codes; VALID, REFRESH and DENY.</span></li>
               <li><b>Agent tool path</b><span>Two actions exposed as MCP tools through the official MCP Actions backend.</span></li>
               <li><b>Observability</b><span>OpenTelemetry spans and metrics for resolution and verification.</span></li>
@@ -57,7 +59,6 @@
               <li><b>TechDocs content provenance</b><span>Today only the TechDocs reference annotation is tracked.</span></li>
               <li><b>Per-agent identity over MCP</b><span>Preserve distinct agent identities where Backstage makes that possible, instead of a shared static-token identity.</span></li>
               <li><b>Production-mode benchmarks</b><span>Latency on PostgreSQL and a built backend, published separately from today's development-lab numbers.</span></li>
-              <li><b>Kubernetes deployment example</b><span>A Helm example with non-root containers, probes and a NetworkPolicy, once validated end to end.</span></li>
               <li><b>Precondition-based verify-and-act</b><span>For actions that support optimistic concurrency, to narrow the check-to-use window.</span></li>
               <li><b>Later</b><span>More source providers (for example Git or Kubernetes), optional authorization providers such as OpenFGA where they solve a real problem, and portable signed receipts on a mature standard.</span></li>
               <li><b>Not planned</b><span>An MCP server, AI gateway or prompt-injection detector, or any language-model-based decision in the verifier.</span></li>

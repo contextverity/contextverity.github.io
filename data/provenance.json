@@ -1,12 +1,23 @@
 {
   "sourceRepo": "https://github.com/contextverity/contextverity",
-  "commit": "3066e49849cac84e074419f106474ed920c7c4f3",
-  "syncedAt": "2026-10-08T11:01:24.365Z",
+  "commit": "multiple",
+  "fileCommits": {
+    "benchmarks-backstage.json": "3066e49849cac84e074419f106474ed920c7c4f3",
+    "benchmarks-core.json": "3066e49849cac84e074419f106474ed920c7c4f3",
+    "kubernetes-network.json": "07d37e4051a72e541d1eb56bbdd8100ab44fb655",
+    "scenarios-backstage.json": "3066e49849cac84e074419f106474ed920c7c4f3",
+    "scenarios-core.json": "3066e49849cac84e074419f106474ed920c7c4f3",
+    "scenarios-kubernetes.json": "7c14e5e3b22201c229cee5a2508280d3cd915844",
+    "telemetry-backstage.json": "3066e49849cac84e074419f106474ed920c7c4f3"
+  },
+  "syncedAt": "2026-10-08T12:26:57.406Z",
   "files": [
     "benchmarks-backstage.json",
     "benchmarks-core.json",
+    "kubernetes-network.json",
     "scenarios-backstage.json",
     "scenarios-core.json",
+    "scenarios-kubernetes.json",
     "summary.json",
     "telemetry-backstage.json"
   ]

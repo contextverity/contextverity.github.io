@@ -30,6 +30,7 @@ if (!files.length) {
 
 mkdirSync(dataDir, { recursive: true });
 const commits = new Set();
+const fileCommits = {};
 for (const f of files) {
   const raw = readFileSync(join(src, f), 'utf8');
   let doc;
@@ -39,22 +40,23 @@ for (const f of files) {
     console.error(`sync-results: ${f} is not valid JSON: ${err.message}`);
     process.exit(1);
   }
+  const fileCommit = doc?.environment?.commit ?? doc?.commit;
+  if (fileCommit) fileCommits[f] = fileCommit;
   if (/^scenarios-/.test(f) && doc?.environment?.commit) commits.add(doc.environment.commit);
   // Re-serialize so the published file is normalized and contains only parsed JSON.
   writeFileSync(join(dataDir, f), JSON.stringify(doc, null, 2) + '\n');
   console.log(`copied ${f}`);
 }
 
-let commit = 'unknown';
-if (commits.size === 1) commit = [...commits][0];
-else if (commits.size > 1) {
-  commit = [...commits].join(',');
-  console.warn(`sync-results: scenario files disagree on commit: ${commit}`);
-}
+// Tiers are measured when their code last changed, so they may come from
+// different commits; each file's commit is recorded.
+const commit = commits.size === 1 ? [...commits][0] : commits.size > 1 ? 'multiple' : 'unknown';
+if (commits.size > 1) console.log(`sync-results: tiers come from ${commits.size} commits (recorded per file)`);
 
 const provenance = {
   sourceRepo: SOURCE_REPO,
   commit,
+  fileCommits,
   syncedAt: new Date().toISOString(),
   files,
 };

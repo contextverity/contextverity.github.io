@@ -407,12 +407,28 @@
     );
   }
 
+  // NetworkPolicy checks recorded by scripts/k8s/check-network.sh.
+  function networkChecks(res, file) {
+    if (!res.ok) return '<h3>Network policy checks</h3>' + notGenerated(file, 'Network policy checks');
+    var d = res.data;
+    return (
+      '<h3>Network policy checks</h3><p class="sub">Run inside the cluster against the chart\'s NetworkPolicy. Commit ' + CV.commitLink(d.commit) + ', ' + esc(d.generatedAt) + '.</p>' +
+      '<div class="table-wrap"><table><thead><tr><th scope="col">Check</th><th scope="col">Observed</th><th scope="col">Result</th></tr></thead><tbody>' +
+      (d.checks || []).map(function (c) {
+        return '<tr><td>' + esc(c.name) + '</td><td><code>' + esc(c.observed) + '</code></td><td>' + CV.verdict(c.pass ? 'VALID' : 'DENY', c.pass ? 'pass' : 'fail') + '</td></tr>';
+      }).join('') +
+      '</tbody></table></div>'
+    );
+  }
+
   function renderTier(section) {
     var tier = section.getAttribute('data-tier');
     var scenFile = section.getAttribute('data-scenarios');
     var benchFile = section.getAttribute('data-benchmarks');
+    var netFile = section.getAttribute('data-network');
     var body = section.querySelector('.tier-body');
-    return Promise.all([CV.load(scenFile), CV.load(benchFile)]).then(function (r) {
+    var none = Promise.resolve({ ok: false, skipped: true });
+    return Promise.all([CV.load(scenFile), benchFile ? CV.load(benchFile) : none, netFile ? CV.load(netFile) : none]).then(function (r) {
       var scen = r[0];
       var html = '';
       if (!scen.ok) {
@@ -436,7 +452,8 @@
         html += '<h3>Unsupported in this tier</h3>' + unsupported(uns);
         html += scenarioTable(tier, list);
       }
-      html += benchmarks(r[1], benchFile);
+      if (benchFile) html += benchmarks(r[1], benchFile);
+      if (netFile) html += networkChecks(r[2], netFile);
       if (scen.ok) html += environment(scen.data);
       body.innerHTML = html;
       body.setAttribute('aria-busy', 'false');
@@ -485,14 +502,24 @@
   function renderProvenance() {
     var el = document.getElementById('provenance');
     if (!el) return;
-    var files = ['scenarios-backstage.json', 'scenarios-core.json', 'benchmarks-backstage.json', 'benchmarks-core.json', 'summary.json'];
+    var files = ['scenarios-backstage.json', 'scenarios-kubernetes.json', 'scenarios-core.json', 'benchmarks-backstage.json', 'benchmarks-core.json', 'kubernetes-network.json', 'summary.json'];
     Promise.all([CV.load('provenance.json')].concat(files.map(CV.load))).then(function (r) {
       var p = r[0].ok ? r[0].data : null;
       var html = '<dl class="env">';
       if (p) {
         var repo = String(p.sourceRepo || '');
         html += '<div><dt>Source repository</dt><dd>' + (/^https:\/\//.test(repo) ? '<a href="' + esc(repo) + '">' + esc(repo.replace('https://', '')) + '</a>' : esc(repo || 'n/a')) + '</dd></div>';
-        html += '<div><dt>Results commit</dt><dd>' + CV.commitLink(p.commit) + '</dd></div>';
+        if (p.commit === 'multiple' && p.fileCommits) {
+          var byCommit = {};
+          Object.keys(p.fileCommits).forEach(function (f) {
+            (byCommit[p.fileCommits[f]] = byCommit[p.fileCommits[f]] || []).push(f.replace(/\.json$/, ''));
+          });
+          html += '<div><dt>Results commits</dt><dd>' + Object.keys(byCommit).map(function (c) {
+            return CV.commitLink(c) + ' <span class="muted">' + esc(byCommit[c].join(', ')) + '</span>';
+          }).join('<br>') + '</dd></div>';
+        } else {
+          html += '<div><dt>Results commit</dt><dd>' + CV.commitLink(p.commit) + '</dd></div>';
+        }
         html += '<div><dt>Synced into this site</dt><dd>' + esc(p.syncedAt) + '</dd></div>';
       } else {
         html += '<div><dt>Provenance</dt><dd>not yet generated</dd></div>';

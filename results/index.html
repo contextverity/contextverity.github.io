@@ -45,6 +45,7 @@
       <div id="provenance" aria-live="polite"><p class="muted">Loading data files…</p></div>
       <ul class="jump">
         <li><a href="#tier-backstage">Live Backstage lab</a></li>
+        <li><a href="#tier-kubernetes">Kubernetes</a></li>
         <li><a href="#tier-core">In-process core</a></li>
         <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/testing.md">How the tests work</a></li>
         <li><a href="https://github.com/contextverity/contextverity/blob/main/docs/results.md">Results notes</a></li>
@@ -54,6 +55,13 @@
     <section class="tier" id="tier-backstage" data-tier="backstage" data-scenarios="scenarios-backstage.json" data-benchmarks="benchmarks-backstage.json" aria-labelledby="tb-h">
       <div class="wrap">
         <div class="tier-head"><h2 id="tb-h">Live Backstage lab (synthetic data, single machine)</h2></div>
+        <div class="tier-body" aria-busy="true"><p class="muted">Loading…</p></div>
+      </div>
+    </section>
+
+    <section class="tier" id="tier-kubernetes" data-tier="kubernetes" data-scenarios="scenarios-kubernetes.json" data-network="kubernetes-network.json" aria-labelledby="tk-h">
+      <div class="wrap">
+        <div class="tier-head"><h2 id="tk-h">Kubernetes: Helm chart on kind with Podman (synthetic data, single machine)</h2></div>
         <div class="tier-body" aria-busy="true"><p class="muted">Loading…</p></div>
       </div>
     </section>
